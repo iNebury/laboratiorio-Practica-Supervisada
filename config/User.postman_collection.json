@@ -1,0 +1,184 @@
+{
+	"info": {
+		"_postman_id": "0bafba97-3812-41be-a932-f904d45f31ce",
+		"name": "User",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37667709"
+	},
+	"item": [
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "nombre",
+							"value": "Diego",
+							"type": "text"
+						},
+						{
+							"key": "apellido",
+							"value": "Urias",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "inebury2005@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "durias2005",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1N3bury",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3001/sistemaDeEscuela/v1/auth/register",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3001",
+					"path": [
+						"sistemaDeEscuela",
+						"v1",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "getUser Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3001/sistemaDeEscuela/v1/user/getUser/67a9595d6cebf2de50b5f064",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3001",
+					"path": [
+						"sistemaDeEscuela",
+						"v1",
+						"user",
+						"getUser",
+						"67a9595d6cebf2de50b5f064"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create course",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"userId\": \"67a95a12247ce3e13ab7efe4\",\r\n  \"nombreCurso\": \"Mate\",\r\n  \"infoCurso\": \"Aprende matematica\",\r\n  \"capacidadCurso\": 30\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3001/sistemaDeEscuela/v1/curso/create",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3001",
+					"path": [
+						"sistemaDeEscuela",
+						"v1",
+						"curso",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "asign course  solo alumnos pueden",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\":\"67a9595d6cebf2de50b5f064\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3001/sistemaDeEscuela/v1/curso/asignCurse/67a960165b7058ea38f761e1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3001",
+					"path": [
+						"sistemaDeEscuela",
+						"v1",
+						"curso",
+						"asignCurse",
+						"67a960165b7058ea38f761e1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete course",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "cursos por usuario",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
