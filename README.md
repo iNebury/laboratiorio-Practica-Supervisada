@@ -1,6 +1,9 @@
-# API Sistema de Escuela
+# API del Sistema de Adopción
 
-Este documento describe los endpoints de la API para el sistema de escuela.
+Esta API está diseñada para gestionar citas para adopciones de mascotas. Incluye funcionalidades para crear, actualizar y listar citas, así como gestionar la información del usuario.
+
+## Variables de Entorno
+
 Cree un archivo `.env` en el directorio raíz y agregue las siguientes variables:
 
 ```
@@ -8,116 +11,187 @@ MONGO_URI=<tu_cadena_de_conexión_mongodb>
 PORT=<tu_puerto_del_servidor>
 JWT_SECRET=<tu_secreto_jwt>
 ```
-## Endpoints
 
-### Registrar Usuario
-- **URL**: `/sistemaDeEscuela/v1/auth/register`
-- **Método**: `POST`
-- **Descripción**: Este endpoint permite registrar un nuevo usuario en el sistema.
+## Endpoints de la API
 
-#### Cuerpo de la solicitud (JSON)
-```json
-{
-  "nombre": "Diego",
-  "apellido": "Urias",
-  "email": "inebury2005@gmail.com",
-  "username": "durias2005",
-  "password": "1N3bury"
-}
-Respuestas Esperadas:
-200 OK: Registro exitoso.
-400 Bad Request: Información de usuario inválida.
-409 Conflict: El email o el username ya están en uso.
-Respuesta Exitosa:
-json
-Copiar
-Editar
-{
-  "success": true,
-  "message": "Usuario registrado exitosamente"
-}
-Respuesta de Error:
-json
-Copiar
-Editar
-{
-  "success": false,
-  "message": "El email ya está registrado"
-}
--Restricciones y Validaciones:
-Validaciones de Contraseña:
-Al menos 8 caracteres.
-Contener al menos una letra mayúscula.
-Incluir al menos un número.
-Tener al menos un carácter especial.
-Correos y Usernames Únicos: Se valida que el email y el username no existan en la base de datos antes del registro.
-Inicio de Sesión
-URL: /sistemaDeEscuela/v1/auth/login
-Método: GET
-Descripción: Este endpoint permite iniciar sesión en el sistema.
-Cuerpo de la solicitud (No especificado, pero se sugiere enviar email y password).
-Respuestas Esperadas:
-200 OK: Inicio de sesión exitoso.
-401 Unauthorized: Credenciales inválidas.
-Ejemplo de Uso
-Registrar Usuario
-bash
-Copiar
-Editar
-curl -X POST http://127.0.0.1:3001/sistemaDeEscuela/v1/auth/register \
--H "Content-Type: application/json" \
--d '{
-  "nombre": "Diego",
-  "apellido": "Urias",
-  "email": "inebury2005@gmail.com",
-  "username": "durias2005",
-  "password": "1N3bury"
-}'
-Respuesta Exitosa:
-json
-Copiar
-Editar
-{
-  "success": true,
-  "message": "Usuario registrado exitosamente"
-}
-Respuesta de Error:
-json
-Copiar
-Editar
-{
-  "success": false,
-  "message": "El email ya está registrado"
-}
-Iniciar Sesión
-bash
-Copiar
-Editar
-curl -X GET http://127.0.0.1:3001/sistemaDeEscuela/v1/auth/login \
--H "Content-Type: application/json" \
--d '{
-  "email": "inebury2005@gmail.com",
-  "password": "1N3bury"
-}'
-Respuesta Exitosa:
-json
-Copiar
-Editar
-{
-  "success": true,
-  "message": "Inicio de sesión exitoso"
-}
-Respuesta de Error:
-json
-Copiar
-Editar
-{
-  "success": false,
-  "message": "Credenciales inválidas"
-}
-Descripción General
-Respuestas Esperadas:
-200 OK: Se indica que la operación (registro o inicio de sesión) fue exitosa.
-400 Bad Request: El cuerpo de la solicitud contiene información inválida.
-401 Unauthorized: Las credenciales proporcionadas (email y contraseña) son incorrectas.
-409 Conflict: El email o el username ya están en uso durante el registro.
+### Citas
+
+- **Crear Cita**
+  - **URL:** `/api/appointments/createAppointment`
+  - **Método:** `POST`
+  - **Cuerpo:**
+    ```json
+    {
+      "date": "2023-10-15T14:48:00.000Z",
+      "status": "CREATED",
+      "pet": "<pet_id>",
+      "user": "<user_id>"
+    }
+    ```
+
+### Usuarios
+
+- **Registrar Usuario**
+  - **URL:** `/api/users/register`
+  - **Método:** `POST`
+  - **Cuerpo:**
+    ```json
+    {
+      "name": "string",
+      "username": "string",
+      "email": "string",
+      "password": "string"
+    }
+    ```
+
+- **Iniciar Sesión**
+  - **URL:** `/api/users/login`
+  - **Método:** `POST`
+  - **Cuerpo:**
+    ```json
+    {
+      "email": "string",
+      "password": "string"
+    }
+    ```
+
+- **Obtener Usuario por ID**
+  - **URL:** `/api/users/:uid`
+  - **Método:** `GET`
+
+- **Eliminar Usuario**
+  - **URL:** `/api/users/:uid`
+  - **Método:** `DELETE`
+
+- **Actualizar Contraseña del Usuario**
+  - **URL:** `/api/users/:uid/password`
+  - **Método:** `PUT`
+  - **Cuerpo:**
+    ```json
+    {
+      "newPassword": "string"
+    }
+    ```
+
+### Mascotas
+
+- **Registrar Mascota**
+  - **URL:** `/api/pets/register`
+  - **Método:** `POST`
+  - **Cuerpo:**
+    ```json
+    {
+      "name": "string",
+      "age": "number",
+      "type": "string",
+      "breed": "string"
+    }
+    ```
+
+- **Obtener Mascota por ID**
+  - **URL:** `/api/pets/:pid`
+  - **Método:** `GET`
+
+- **Eliminar Mascota**
+  - **URL:** `/api/pets/:pid`
+  - **Método:** `DELETE`
+
+- **Actualizar Información de la Mascota**
+  - **URL:** `/api/pets/:pid`
+  - **Método:** `PUT`
+  - **Cuerpo:**
+    ```json
+    {
+      "name": "string",
+      "age": "number",
+      "type": "string",
+      "breed": "string"
+    }
+    ```
+
+## Funcionalidades Adicionales
+
+Las siguientes funcionalidades necesitan ser desarrolladas:
+
+1. **Actualizar Foto del Usuario**
+   - Descripción: Implementar funcionalidad para actualizar la foto de perfil del usuario.
+
+
+- **Obtener Citas**
+  - **URL:** `/api/appointments`
+  - **Método:** `GET`
+  - **Parámetros de consulta:**
+    - `uid` (requerido): ID de usuario
+    - `limite`: Número máximo de citas a retornar (por defecto 5)
+    - `desde`: Índice de paginación para la consulta (por defecto 0)
+  - **Respuesta exitosa:**
+    ```json
+    {
+      "success": true,
+      "message": "Se obtuvieron las citas con éxito",
+      "total": 10,
+      "appointment": []
+    }
+    ```
+  - **Respuesta de error:**
+    ```json
+    {
+      "success": false,
+      "message": "Error al obtener las citas",
+      "error": "Mensaje de error detallado"
+    }
+    ```
+
+- **Actualizar Cita**
+  - **URL:** `/api/appointments/:uid`
+  - **Método:** `PUT`
+  - **Cuerpo:**
+    ```json
+    {
+      "campo1": "valor1",
+      "campo2": "valor2"
+    }
+    ```
+  - **Respuesta exitosa:**
+    ```json
+    {
+      "success": true,
+      "msg": "La cita actualizada correctamente",
+      "appointment": {}
+    }
+    ```
+  - **Respuesta de error:**
+    ```json
+    {
+      "success": false,
+      "msg": "Error al actualizar la cita",
+      "error": "Mensaje de error detallado"
+    }
+    ```
+
+- **Cancelar Cita**
+  - **URL:** `/api/appointments/:uid/cancel`
+  - **Método:** `PUT`
+  - **Cuerpo:**
+    ```json
+    {
+      "status": "cancelled"
+    }
+    ```
+  - **Respuesta exitosa:**
+    ```json
+    {
+      "success": true,
+      "msg": "Cita actualizada correctamente",
+      "appointment": {}
+    }
+    ```
+  - **Respuesta de error:**
+    ```json
+    {
+      "success": false,
+      "msg": "Error al actualizar la cita",
+      "error": "Mensaje de error detallado"
+    }
+    ```
+

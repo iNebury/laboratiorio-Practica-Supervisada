@@ -1,4 +1,4 @@
-import bcrypt from "bcryptjs"
+import { hash, verify } from "argon2"
 import User from "../user/user.model.js"
 import { generateJWT } from "../helpers/generate-jwt.js";
 
@@ -6,7 +6,7 @@ export const register = async (req, res) => {
     try {
         const data = req.body;
         let profilePicture = req.file ? req.file.filename : null;
-        const encryptedPassword = await bcrypt.hash(data.password, 10);
+        const encryptedPassword = await hash(data.password)
         data.password = encryptedPassword
         data.profilePicture = profilePicture
 
@@ -39,7 +39,7 @@ export const login = async (req, res) => {
             })
         }
 
-        const validPassword = await bcrypt.compare(password, user.password)
+        const validPassword = await verify(user.password, password)
 
         if(!validPassword){
             return res.status(400).json({

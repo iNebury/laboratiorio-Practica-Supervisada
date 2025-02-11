@@ -1,42 +1,48 @@
-import { body, param } from "express-validator";
+import { body, param , check } from "express-validator";
 import { emailExists, usernameExists, userExists } from "../helpers/db-validators.js";
-import { validarCampos } from "./validar-campos.js";
-import { borrarArchivoEnError } from "./borrar-archivo-en-error.js";
-import { manejoErrores } from "./manejo-errores.js";
+import { validarCampos } from "./validate-fields.js";
+import { deleteFileOnError } from "./delete-file-on-error.js";
+import { handleErrors } from "./handle-errors.js";
 
 export const registerValidator = [
-    body("nombre").notEmpty().withMessage("El nombre es requerido"),
+    body("name").notEmpty().withMessage("El nombre es requerido"),
     body("username").notEmpty().withMessage("El username es requerido"),
     body("email").notEmpty().withMessage("El email es requerido"),
     body("email").isEmail().withMessage("No es un email válido"),
     body("email").custom(emailExists),
     body("username").custom(usernameExists),
-    body("password"),
+    body("password").isStrongPassword({
+        minLength: 8,
+        minLowercase:1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1
+    }),
     validarCampos,
-    borrarArchivoEnError,
-    manejoErrores
+    deleteFileOnError,
+    handleErrors
 ]
 
 export const loginValidator = [
-    body("nombre").optional().isEmail().withMessage("No es un email válido"),
+    body("email").optional().isEmail().withMessage("No es un email válido"),
     body("username").optional().isString().withMessage("Username es en formáto erróneo"),
     body("password").isLength({min: 4}).withMessage("El password debe contener al menos 8 caracteres"),
     validarCampos,
-    manejoErrores
+    handleErrors
 ]
 
 export const getUserByIdValidator = [
     param("uid").isMongoId().withMessage("No es un ID válido de MongoDB"),
     param("uid").custom(userExists),
     validarCampos,
-    manejoErrores
+    handleErrors
 ]
 
 export const deleteUserValidator = [
     param("uid").isMongoId().withMessage("No es un ID válido de MongoDB"),
     param("uid").custom(userExists),
     validarCampos,
-    manejoErrores
+    handleErrors
 ]
 
 export const updatePasswordValidator = [
@@ -44,16 +50,21 @@ export const updatePasswordValidator = [
     param("uid").custom(userExists),
     body("newPassword").isLength({min: 8}).withMessage("El password debe contener al menos 8 caracteres"),
     validarCampos,
-    manejoErrores
+    handleErrors
 ]
 
 export const updateUserValidator = [
     param("uid", "No es un ID válido").isMongoId(),
     param("uid").custom(userExists),
     validarCampos,
-    manejoErrores
+    handleErrors
 ]
 
-
+export const UpdatePictureProfileValidator =[
+    check("uid").notEmpty().isMongoId("Nos es un id válido"),
+    check("uid").custom(userExists),
+    validarCampos,
+    handleErrors
+]
 
 

@@ -1,4 +1,7 @@
+import { hash } from "argon2";
 import User from "./user.model.js"
+
+
 
 export const getUserById = async (req, res) => {
     try{
@@ -126,3 +129,4 @@ export const updateUser = async (req, res) => {
         });
     }
 }
+

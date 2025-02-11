@@ -1,46 +1,48 @@
-import { Schema, model } from "mongoose";
+import { Schema, model} from "mongoose";
 
-const userSchema = new Schema({
-    nombre:{
+const userSchema = Schema({
+    name:{
         type: String,
-        required: true
+        required: [true, "Name is required"],
+        maxLength: [25, "Name cannot exceed 25 characters"]
     },
-    apellido:{
+    surname:{
         type: String,
-        required: true
+        required: [true, "Surname is required"],
+        maxLength: [25, "Surname cannot exceed 25 characters"]
     },
     username:{
         type: String,
         required: true,
-        unique: true
+        unique:true
     },
     email:{
         type: String,
-        required: true,
+        required: [true, "Email is required"],
         unique: true
     },
     password:{
         type: String,
-        required: true
+        required: [true, "Password is required"]
     },
-    fotoDePerfil:{
+    profilePicture:{
+        type: String
+    },
+    phone:{
         type: String,
+        minLength: 8,
+        maxLength: 8,
+        required: true
     },
     role:{
         type: String,
         required: true,
-        enum: ['TEACHER_ROLE', 'STUDENT_ROLE'],
-        default: 'STUDENT_ROLE'
+        enum: ["ADMIN_ROLE", "USER_ROLE"]
     },
-    estado:{
+    status:{
         type: Boolean,
         default: true
-    },
-    cursos:[{
-        type: Schema.Types.ObjectId,
-        ref: 'Curso'
-    }]
-
+    }
 },
 {
     versionKey: false,
@@ -48,8 +50,9 @@ const userSchema = new Schema({
 })
 
 userSchema.methods.toJSON = function(){
-    const { __v, password, ...usuario } = this.toObject();
-    return usuario;
+    const {password, _id, ...usuario} = this.toObject()
+    usuario.uid = _id
+    return usuario
 }
 
-export default model('User', userSchema);
+export default model("User", userSchema)
